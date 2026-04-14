@@ -11,6 +11,6 @@ int main(void) {
 		return 1;
 	}
 	printf("%s\n", frase);
-	printf("RENATO CARIANI");
+	printf("RENATO CARIANI\n");
 	return 0;
 }
