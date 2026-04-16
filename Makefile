@@ -1,9 +1,10 @@
-#Something Something Setup
-#Ordenar de baixo pra cima
-all: run
+all: compile
+
+CFLAGS ?= -O2 -Wall -Wextra -std=c11
+LDFLAGS ?= -pthread
 
 compile:
-	@gcc main.c -o main
+	@gcc $(CFLAGS) main.c -o main $(LDFLAGS)
 
 run: compile
 	@./main
