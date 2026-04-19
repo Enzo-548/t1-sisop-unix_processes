@@ -1,10 +1,8 @@
 #include <stdio.h>
-//#include <placeholder.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <stress_test.h>
 int main(){
-    /*
-    inserir metodo na biblioteca placeholder
-    */
-    printf("shut up, mom!\n");
-    printf("silence from ye!\n");
+    start();
     return 0;
 }
