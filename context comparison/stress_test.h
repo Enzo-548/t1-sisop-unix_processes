@@ -18,16 +18,19 @@ static inline double now() {
     return ts.tv_sec + ts.tv_nsec / 1e9;
 }
 
+//um unico corpo por exprerimentacao
 typedef struct{
 int* instances[MAX];
 int execution_time[MAX];
 int inst_cont;
 }Corpo;
 
-Corpo new(){
+static inline Corpo new(){
     Corpo a = {{},{},0};
     return a;
 }
+
+//static inline int putCorpo(int *pid){}
 
 int start();
 

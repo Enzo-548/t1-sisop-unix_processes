@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
-void aumenta(int *cont){
-    (*cont)++;
-}
 int start(int counter){
     int cont = 0;
     pid_t childpid;
