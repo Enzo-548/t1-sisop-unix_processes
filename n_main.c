@@ -5,9 +5,15 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <semaphore.h>
 #include <string.h>
 
-#define BILHAO 1000000000
+#define BILHAO 1000000000L
+
+typedef struct {
+    long contador;
+    sem_t mutex;
+} Sync;
 
 void exit_err(const char* msg){
     perror(msg);
@@ -27,7 +33,9 @@ int main(){
     //     printf("if");
     //     processos(n);
     // }
-    processos(8);
+    //processos(8);
+
+    processos_mutex(8);
 }
 
 
@@ -68,14 +76,67 @@ void processos(int n){
         if(waitpid(pids[i], &status, 0) < 0){
             exit_err("filho não retornou");
         }
+        printf("pid:%d \nstatus: %d\n", pids[i], status);
     }
-
+    
     printf("Esperado:           %010ld\n", BILHAO);
     printf("Soma total com P1:  %010ld\n", *contador);
     printf("N = %d\n", n);
 
     //liberando a memória
     shmdt(contador);
+    shmctl(shmid, IPC_RMID, NULL);
+    free(pids);
+}
+
+void processos_mutex(int n){
+    printf("iniciei\n");
+    int shmid = shmget(IPC_PRIVATE, sizeof(long), IPC_CREAT | 0600);
+    if(shmid == -1){
+        exit_err("erro ao compartilhar memória");
+    }
+
+    //muda o compart de mem para a struct
+    Sync *sync = (Sync*)shmat(shmid, NULL, 0);
+    long max = BILHAO/n;
+
+    pid_t *pids = malloc(n * sizeof(pid_t));
+
+    //inicia com flag 1 para os processos enxergarem
+    sem_init(&sync->mutex, 1, 1);
+
+    for(int i = 0; i < n; i++){
+        pid_t pid = fork();
+        if(pid < 0){
+            exit_err("erro no fork");
+        }
+        else if(pid == 0){
+            for(long j = 0; j<max; j++){
+                sem_wait(&sync->mutex);     //espera o mutex abrir e trava ele
+                (sync->contador)++;
+                sem_post(&sync->mutex);     //destrava o mutex
+            }
+            shmdt(sync->contador);
+            exit(0);
+        }
+
+        pids[i] = pid;
+    }
+
+    for(int i = 0; i<n; i++){
+        int status;
+        if(waitpid(pids[i], &status, 0) < 0){
+            exit_err("filho não retornou");
+        }
+        printf("pid:%d \nstatus: %d\n", pids[i], status);
+    }
+
+    printf("Esperado:           %010ld\n", BILHAO);
+    printf("Soma total com P2:  %010ld\n", sync->contador);
+    printf("N = %d\n", n);
+
+    sem_destroy(&sync->mutex);  //libera semaforo da memoria
+    shmdt(sync);
     shmctl(shmid, IPC_RMID, NULL);
     free(pids);
 }
