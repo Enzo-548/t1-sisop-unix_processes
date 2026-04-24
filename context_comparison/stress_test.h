@@ -1,7 +1,7 @@
 //header init
 #include <sys/types.h>
-#include <time.h>
-#include <linux/time.h>
+//#include <time.h>
+//#include <linux/time.h>
 #define MAX 4
 
 
@@ -12,11 +12,11 @@ static inline void aumenta(int *count){
 }
 
 //cronometro
-static inline double now() {
-    struct timespec ts;
+/*static inline double now() {
+    //struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return ts.tv_sec + ts.tv_nsec / 1e9;
-}
+}*/
 
 //um unico corpo por exprerimentacao
 typedef struct{
@@ -25,12 +25,21 @@ int execution_time[MAX];
 int inst_cont;
 }Corpo;
 
-static inline Corpo new(){
-    Corpo a = {{},{},0};
-    return a;
+
+static inline int putCorpo(int *pid, Corpo corpo){
+    
+    for (size_t i = 0; i < MAX ; i++)
+    {
+        if (corpo.instances[i] == NULL)
+        {
+            corpo.instances[i] = pid;
+            return 0;
+        }
+    }
+    return 1;
 }
 
-//static inline int putCorpo(int *pid){}
+int processes_run();
 
 int start();
 

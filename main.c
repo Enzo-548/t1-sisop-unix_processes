@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stress_test.h>
+
 int main(){
-    start();
+    processes_run();
     return 0;
 }
