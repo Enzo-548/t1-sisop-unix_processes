@@ -96,13 +96,13 @@ void processos_mutex(int n){
         exit_err("erro ao compartilhar memória");
     }
 
-    //muda o compart de mem para a struct
+    //compartilha a mem da struct
     Sync *sync = (Sync*)shmat(shmid, NULL, 0);
     long max = BILHAO/n;
 
     pid_t *pids = malloc(n * sizeof(pid_t));
 
-    //inicia com flag 1 para os processos enxergarem
+    //pshared 1 para compartilhar entre os forks
     sem_init(&sync->mutex, 1, 1);
 
     for(int i = 0; i < n; i++){
