@@ -1,4 +1,5 @@
 #include <time.h>
+#include <linux/time.h>
 
 static struct timespec start, end;
 
