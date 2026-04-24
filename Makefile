@@ -1,15 +1,22 @@
+CC=gcc
+CFLAGS=-Wall -O2 -pthread
+
+SRC=main.c \
+    threads/threads.c \
+    processes/processes.c \
+    ipc/shm.c \
+    ipc/semaphore.c \
+    common/timer.c
+
+OUT=counter
+
 all: run
 
-CFLAGS = -Wall -Wextra
-PFLAGS = -lpthread -lrt
+build:
+	$(CC) $(SRC) -o $(OUT) $(CFLAGS)
 
-PROG = n_main
-
-compile:
-	@gcc $(CFLAGS) $(PROG).c -o $(PROG) $(PFLAGS)
-
-run: compile
-	@./$(PROG)
+run: build
+	./$(OUT)
 
 clean:
-	@rm -f $(PROG) %.o
+	rm -f $(OUT) results.csv
