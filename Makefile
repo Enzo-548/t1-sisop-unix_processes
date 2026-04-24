@@ -1,14 +1,15 @@
-all: compile
+all: run
 
-CFLAGS ?= -O2 -Wall -Wextra -std=c11
-LDFLAGS ?= -pthread
+CFLAGS = -Wall -Wextra
+PFLAGS = -lpthread -lrt
 
-MODE ?= T2
-N ?= 4
-TOTAL ?= 10000000
+PROG = n_main
 
 compile:
-	@gcc $(CFLAGS) main.c -o main $(LDFLAGS)
+	@gcc $(CFLAGS) $(PROG).c -o $(PROG) $(PFLAGS)
 
 run: compile
-	@./main $(MODE) $(N) $(TOTAL)
+	@./$(PROG)
+
+clean:
+	@rm -f $(PROG) %.o
