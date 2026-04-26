@@ -1,13 +1,14 @@
 #include <time.h>
-#include <linux/time.h>
 
 static struct timespec start, end;
 
-void start_timer() {
+void start_timer()
+{
     clock_gettime(CLOCK_MONOTONIC, &start);
 }
 
-double end_timer() {
+double end_timer()
+{
     clock_gettime(CLOCK_MONOTONIC, &end);
 
     return (end.tv_sec - start.tv_sec) +
