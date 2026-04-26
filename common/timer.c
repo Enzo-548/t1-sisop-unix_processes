@@ -1,5 +1,8 @@
+#if defined(_WIN32)
 #include <time.h>
+#else
 #include <linux/time.h>
+#endif
 
 static struct timespec start, end;
 
