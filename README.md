@@ -50,7 +50,6 @@ Começando pelos experimentos T1 e P1, dentro do contexto dos seguintes hardware
 | Thread   | 4       | 0,762     | 329749789 |
 | Thread   | 8       | 0,676     | 272181407 |
 
-<ANÁLISE DO PORQUÊ OS CONTADORES NAO CHEGARAM AO VALOR CORRETO, E COMO A DIFERENÇA DE HARDWARE INFLUENCIOU NA DIFERENÇA> 
 
 Com estes resultados, é possível perceber que a soma total do contador não conseguiu chegar ao número esperado, 1.000.000.000. Isso acontece por causa da falta de mecanismos de sincronização. Portanto, sempre que mais de um trabalhador tenta "adicionar" sua quantia à memória compartilhada ao mesmo tempo, eles não verificam se há algum outro tentando escrever e o último acaba sobrescrevendo o anterior. Em outras palavras, os trabalhadores estão sofrendo com a "Race Condition", já que a instrução de soma (counter++) não é atômica.
 Já a diferença dos resultados finais entre cada máquina está ligada à variabilidade de núcleos e à arquitetura dos processadores. Logo, CPUs que possuem menos núcleos compartilham eles com mais trabalhadores, fazendo com que o sistema operacional tenha que gerenciar cada trabalhador para que revezem o mesmo núcleo através de preempção. Esse revezamento acontece através de troca de contexto, fazendo com que executem sequencialmente até ocorrer a troca. Isso essencialmente transforma boa parte da execução que seria paralela em sequencial, aumentando o tempo de execução mas diminuindo as colisões de acesso à memória. Portanto, é possível observar que o resultado se aproxima mais do esperado quanto mais tempo é gasto processando-o.
@@ -97,15 +96,21 @@ Assim, pode-se concluir que o uso de threads toma muito mais proveito de mecanis
 
 ## Sem sincronização -
 #### P1:
+![Grafico P1](./images/Grafico_P1.png)
+
 #### T1:
+![Grafico T1](./images/Grafico_T1.png)
 
 ## Com sincronização -
 #### P2:
-#### T2:
+![Grafico P2](./images/Grafico_P2.png)
 
+#### T2:
+![Grafico T2](./images/Grafico_T2.png)
 
 # Assinaturas de Hardware
 #### Executed on: **Gustavo: WSL - Ubuntu**
+"WSL"
 ```
   Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
@@ -233,7 +238,8 @@ Vulnerabilities:
   Vmscape:                   Not affected
 ```
 
-### Executed on: **Renato: WSL Ubuntu**
+#### Executed on: **Renato: WSL Ubuntu**
+"WSL (2)"
 ```
 Architecture:                         x86_64
 CPU op-mode(s):                       32-bit, 64-bit
