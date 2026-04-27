@@ -105,3 +105,80 @@ Vulnerabilities:
                            BHI SW loop, KVM SW loop
   Srbds:                  Unknown: Dependent on hypervisor status
   Tsx async abort:        Not affected
+
+
+# Executed on:
+**Linux Ubuntu 24.04.1 LTS**
+Architecture:                x86_64
+  CPU op-mode(s):            32-bit, 64-bit
+  Address sizes:             39 bits physical, 48 bits virtual
+  Byte Order:                Little Endian
+CPU(s):                      8
+  On-line CPU(s) list:       0-7
+Vendor ID:                   GenuineIntel
+  Model name:                11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+    CPU family:              6
+    Model:                   140
+    Thread(s) per core:      2
+    Core(s) per socket:      4
+    Socket(s):               1
+    Stepping:                1
+    CPU(s) scaling MHz:      59%
+    CPU max MHz:             4700,0000
+    CPU min MHz:             400,0000
+    BogoMIPS:                5606,40
+    Flags:                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pg
+                             e mca cmov pat pse36 clflush dts acpi mmx fxsr sse 
+                             sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm cons
+                             tant_tsc art arch_perfmon pebs bts rep_good nopl xt
+                             opology nonstop_tsc cpuid aperfmperf tsc_known_freq
+                              pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ss
+                             se3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2ap
+                             ic movbe popcnt tsc_deadline_timer aes xsave avx f1
+                             6c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb
+                              cat_l2 cdp_l2 ssbd ibrs ibpb stibp ibrs_enhanced t
+                             pr_shadow flexpriority ept vpid ept_ad fsgsbase tsc
+                             _adjust bmi1 avx2 smep bmi2 erms invpcid rdt_a avx5
+                             12f avx512dq rdseed adx smap avx512ifma clflushopt 
+                             clwb intel_pt avx512cd sha_ni avx512bw avx512vl xsa
+                             veopt xsavec xgetbv1 xsaves split_lock_detect user_
+                             shstk dtherm ida arat pln pts hwp hwp_notify hwp_ac
+                             t_window hwp_epp hwp_pkg_req vnmi avx512vbmi umip p
+                             ku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_v
+                             nni avx512_bitalg avx512_vpopcntdq rdpid movdiri mo
+                             vdir64b fsrm avx512_vp2intersect md_clear ibt flush
+                             _l1d arch_capabilities
+Virtualization features:     
+  Virtualization:            VT-x
+Caches (sum of all):         
+  L1d:                       192 KiB (4 instances)
+  L1i:                       128 KiB (4 instances)
+  L2:                        5 MiB (4 instances)
+  L3:                        12 MiB (1 instance)
+NUMA:                        
+  NUMA node(s):              1
+  NUMA node0 CPU(s):         0-7
+Vulnerabilities:             
+  Gather data sampling:      Vulnerable
+  Ghostwrite:                Not affected
+  Indirect target selection: Mitigation; Aligned branch/return thunks
+  Itlb multihit:             Not affected
+  L1tf:                      Not affected
+  Mds:                       Not affected
+  Meltdown:                  Not affected
+  Mmio stale data:           Not affected
+  Old microcode:             Not affected
+  Reg file data sampling:    Not affected
+  Retbleed:                  Not affected
+  Spec rstack overflow:      Not affected
+  Spec store bypass:         Mitigation; Speculative Store Bypass disabled via p
+                             rctl
+  Spectre v1:                Mitigation; usercopy/swapgs barriers and __user poi
+                             nter sanitization
+  Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditi
+                             onal; PBRSB-eIBRS SW sequence; BHI SW loop, KVM SW 
+                             loop
+  Srbds:                     Not affected
+  Tsa:                       Not affected
+  Tsx async abort:           Not affected
+  Vmscape:                   Not affected
