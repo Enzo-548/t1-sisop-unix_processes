@@ -10,14 +10,86 @@ Este relatório descreve o experimento exploratório comparando o overhead de cr
    - P2: uso de fork() e semáforos para a sincronização;
    - T2: uso de threads e mutex para a sincronização.
 
-Cada experimento será salvo em um arquivo csv listando seu: modo de execução, tempo de execução, trabalhadores, sincronização e resultado final do contador.
+Cada experimento foi salvo em um arquivo csv listando seu: modo de execução, tempo de execução, trabalhadores, sincronização e resultado final do contador.
 
-Após a execução de tais experimentos devem ser gerados gráficos e tabelas contendo os resultados obtidos em cada um, a fim de analisar o tempo overheads e possíveis discrepâncias no resultado do contador sem sincronização. Além de comparar os diferenças entre Processos e Threads. 
+Após a execução de tais experimentos, foram ser gerados gráficos e tabelas contendo os resultados obtidos em cada um, a fim de analisar o tempo, overheads e possíveis discrepâncias na soma final do contador sem sincronização. Além possibilitar a comparação entre os resultados de Processos e Threads.
+
+Os experimentos foram executados nos hardwares descritos ao [fim do relatório](#assinaturas-de-hardware).
 
 # Tabelas de tempo
 
+Começando pelos experimentos T1 e P1, dentro do contexto dos seguintes hardwares, os valores finais dos contadores foram:
 
+#### Linux Nativo (Gustavo)
+| Modo     | Workers | Tempo (s) | Contador  |
+| -------- | ------- | --------- | --------- |
+| Processo | 2       | 0,891     | 502515113 |
+| Processo | 4       | 0,583     | 265018899 |
+| Processo | 8       | 1,058     | 258509813 |
+| Thread   | 2       | 0,830     | 501786856 |
+| Thread   | 4       | 0,597     | 266905048 |
+| Thread   | 8       | 0,947     | 259630143 |
 
+#### WSL - Ubuntu (Gustavo)
+| Modo     | Workers | Tempo (s) | Contador  |
+| -------- | ------- | --------- | --------- |
+| Processo | 2       | 0,752     | 513616116 |
+| Processo | 4       | 0,474     | 293385117 |
+| Processo | 8       | 0,531     | 218581715 |
+| Thread   | 2       | 0,683     | 520735268 |
+| Thread   | 4       | 0,483     | 315689315 |
+| Thread   | 8       | 0,515     | 222882439 |
+
+#### WSL - Ubuntu (Renato)
+| Modo     | Workers | Tempo (s) | Contador  |
+| -------- | ------- | --------- | --------- |
+| Processo | 2       | 1,552     | 583439198 |
+| Processo | 4       | 0,727     | 313336578 |
+| Processo | 8       | 0,668     | 258657047 |
+| Thread   | 2       | 1,166     | 540894044 |
+| Thread   | 4       | 0,762     | 329749789 |
+| Thread   | 8       | 0,676     | 272181407 |
+
+<ANÁLISE DO PORQUÊ OS CONTADORES NAO CHEGARAM AO VALOR CORRETO, E COMO A DIFERENÇA DE HARDWARE INFLUENCIOU NA DIFERENÇA> 
+Com estes resultados, é possível perceber que a soma total do contador não conseguiu chegar ao número esperado, 1.000.000.000. Isso acontece por causa da falta de mecanismos de sincronização. Portanto, sempre que mais de um trabalhador tenta "adicionar" sua quantia à memória compartilhada ao mesmo tempo, eles não verificam se há algum outro tentando escrever e o último acaba sobrescrevendo o anterior. Em outras palavras, os trabalhadores estão sofrendo com a "Race Condition", já que a instrução de soma (counter++) não é atômica.
+
+Já a diferença dos resultados finais entre cada máquina está ligada à variabilidade de núcleos e à arquitetura dos processadores. Logo, CPUs que possuem menos núcleos compartilham eles com mais trabalhadores, fazendo com que o sistema operacional tenha que gerenciar cada trabalhador para que revezem o mesmo núcleo. Esse revezamento acontece através de troca de contexto, fazendo com que executem sequencialmente até ocorrer a troca. Isso essencialmente transforma boa parte da execução que seria paralela em sequencial, aumentando o tempo de execução. Portanto, é possível observar que o resultado se aproxima mais do esperado quanto mais tempo é gasto processando-o.
+
+Agora, ao utilizarmos os mecanismos de sincronização com P2 e T2, isso é, o Mutex em threads e o Semáforo nos processos, obtemos o seguinte resultado:
+
+#### Linux Nativo (Gustavo)
+| Modo     | Workers | Tempo (s) | Contador   |
+| -------- | ------- | --------- | ---------- |
+| Processo | 2       | 221,343   | 1000000000 |
+| Processo | 4       | 279,629   | 1000000000 |
+| Processo | 8       | 356,094   | 1000000000 |
+| Thread   | 2       | 66,537    | 1000000000 |
+| Thread   | 4       | 92,847    | 1000000000 |
+| Thread   | 8       | 113,202   | 1000000000 |
+
+#### WSL - Ubuntu (Gustavo)
+| Modo     | Workers | Tempo (s) | Contador   |
+| -------- | ------- | --------- | ---------- |
+| Processo | 2       | 129,282   | 1000000000 |
+| Processo | 4       | 176,888   | 1000000000 |
+| Processo | 8       | 212,249   | 1000000000 |
+| Thread   | 2       | 46,985    | 1000000000 |
+| Thread   | 4       | 43,960    | 1000000000 |
+| Thread   | 8       | 46,283    | 1000000000 |
+
+#### WSL - Ubuntu (Renato)
+| Modo     | Workers | Tempo (s) | Contador   |
+| -------- | ------- | --------- | ---------- |
+| Processo | 2       | 162,299   | 1000000000 |
+| Processo | 4       | 268,550   | 1000000000 |
+| Processo | 8       | 345,130   | 1000000000 |
+| Thread   | 2       | 62,091    | 1000000000 |
+| Thread   | 4       | 69,875    | 1000000000 |
+| Thread   | 8       | 79,877    | 1000000000 |
+
+<ANÁLISE DO TEMPO DE EXECUÇÃO E POR QUE AGORA ELES CONTARAM CORRETAMENTE> 
+
+<GRÁFICO DE ESCALABILIDADE, MOSTRANDO TEMPO DE EXECUÇÃO x WORKERS>
 # Gráficos
 
 ## Sem sincronização -
@@ -25,12 +97,12 @@ Após a execução de tais experimentos devem ser gerados gráficos e tabelas co
 #### T1:
 
 ## Com sincronização -
-#### P1:
-#### T1:
+#### P2:
+#### T2:
 
 
 # Assinaturas de Hardware
-#### Executed on: **Gustavo: WSL2 - Ubuntu**
+#### Executed on: **Gustavo: WSL - Ubuntu**
 ```
   Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
