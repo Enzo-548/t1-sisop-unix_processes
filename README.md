@@ -53,8 +53,7 @@ Começando pelos experimentos T1 e P1, dentro do contexto dos seguintes hardware
 <ANÁLISE DO PORQUÊ OS CONTADORES NAO CHEGARAM AO VALOR CORRETO, E COMO A DIFERENÇA DE HARDWARE INFLUENCIOU NA DIFERENÇA> 
 
 Com estes resultados, é possível perceber que a soma total do contador não conseguiu chegar ao número esperado, 1.000.000.000. Isso acontece por causa da falta de mecanismos de sincronização. Portanto, sempre que mais de um trabalhador tenta "adicionar" sua quantia à memória compartilhada ao mesmo tempo, eles não verificam se há algum outro tentando escrever e o último acaba sobrescrevendo o anterior. Em outras palavras, os trabalhadores estão sofrendo com a "Race Condition", já que a instrução de soma (counter++) não é atômica.
-
-Já a diferença dos resultados finais entre cada máquina está ligada à variabilidade de núcleos e à arquitetura dos processadores. Logo, CPUs que possuem menos núcleos compartilham eles com mais trabalhadores, fazendo com que o sistema operacional tenha que gerenciar cada trabalhador para que revezem o mesmo núcleo. Esse revezamento acontece através de troca de contexto, fazendo com que executem sequencialmente até ocorrer a troca. Isso essencialmente transforma boa parte da execução que seria paralela em sequencial, aumentando o tempo de execução mas diminuindo as colisões de acesso à memória. Portanto, é possível observar que o resultado se aproxima mais do esperado quanto mais tempo é gasto processando-o.
+Já a diferença dos resultados finais entre cada máquina está ligada à variabilidade de núcleos e à arquitetura dos processadores. Logo, CPUs que possuem menos núcleos compartilham eles com mais trabalhadores, fazendo com que o sistema operacional tenha que gerenciar cada trabalhador para que revezem o mesmo núcleo através de preempção. Esse revezamento acontece através de troca de contexto, fazendo com que executem sequencialmente até ocorrer a troca. Isso essencialmente transforma boa parte da execução que seria paralela em sequencial, aumentando o tempo de execução mas diminuindo as colisões de acesso à memória. Portanto, é possível observar que o resultado se aproxima mais do esperado quanto mais tempo é gasto processando-o.
 
 Agora, ao utilizarmos os mecanismos de sincronização com P2 e T2, isso é, o Mutex em threads e o Semáforo nos processos, obtemos o seguinte resultado:
 
@@ -88,9 +87,12 @@ Agora, ao utilizarmos os mecanismos de sincronização com P2 e T2, isso é, o M
 | Thread   | 4       | 69,875    | 1000000000 |
 | Thread   | 8       | 79,877    | 1000000000 |
 
-<ANÁLISE DO TEMPO DE EXECUÇÃO E POR QUE AGORA ELES CONTARAM CORRETAMENTE> 
 
-<GRÁFICO DE ESCALABILIDADE, MOSTRANDO TEMPO DE EXECUÇÃO x WORKERS>
+Ao observar os resultados da execução com sincronização é possível perceber que o contador conseguiu chegar ao resultado esperado de 1 bilhão, significando que os trabalhadores utilizaram com sucesso mecanismos de sincronização (mutex e semáforo), pois não houveram mais sobrescritas na memória durante a execução. Isso ocorreu pois tais mecanismos transformaram uma instrução que antes era não-atômica em uma Região Crítica, através de mutex_lock()/unlock e sem_wait/post, obrigando os trabalhadores a verificarem se o bloco de memória compartilhada está sendo utilizado antes de tentarem escrever nele. Essencialmente tornando aquela instrução atômica.
+Essa mudança faz com que o contador sempre atinja o objetivo esperado, mesmo ocorrendo trocas de contexto, pois o incremento se tornou uma instrução atômica. Porém, a sincronização traz junto dela uma diminuição extremamente significativa em performance, aumentando no mínimo em mais de 100 vezes (+10000%) o tempo de execução com processos conforme os resultados obtidos. Por outro lado, a execução com threads aumentou no mínimo 40 vezes (+4000%) o tempo.
+Assim, pode-se concluir que o uso de threads toma muito mais proveito de mecanismos de sincronização em relação à processos, nesse caso principalmente devido a compartilharem o mesmo processo, logo compartilhando a mesma página de memória, precisando salvar e carregar apenas a pilha e os registradores a cada troca de contexto.
+
+
 # Gráficos
 
 ## Sem sincronização -
