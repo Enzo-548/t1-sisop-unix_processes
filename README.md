@@ -5,8 +5,11 @@ Porto Alegre – RS- Brasil
 ***Pontíficia Universidade Católica do Rio Grande do Sul*** 
 ### Integrantes
 Enzo Salatino Picoli
+
 Gustavo Burgie Ganzo Barcellos
+
 Renato Machado de Souza
+
 Vicenzo Martins Marramarco 
 
 
