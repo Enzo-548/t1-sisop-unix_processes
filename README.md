@@ -1,7 +1,36 @@
 # t1-sisop-unix_processes
 
-# Executed on:
-**Github Codespaces**
+# Introdução
+Este relatório descreve o experimento exploratório comparando o overhead de criação, custo de comunicação e a consistência de dados entre Processos e Threads. O objetivo do trabalho é implementar um contador global até o valor de 1.000.000.000 através de compartilhamento de memória e distribuir o esforço entre as unidades de execução (trabalhadores), variando entre 2, 4 e 8 unidades, e executar quatro experimentos:
+
+1. P1 & T1: Executar sem mecanismo de sincronização;
+   - P1: uso de fork();
+   - T1: uso de threads.
+2. P2 & T2: Executar com mecanismo de sincronização.
+   - P2: uso de fork() e semáforos para a sincronização;
+   - T2: uso de threads e mutex para a sincronização.
+
+Cada experimento será salvo em um arquivo csv listando seu: modo de execução, tempo de execução, trabalhadores, sincronização e resultado final do contador.
+
+Após a execução de tais experimentos devem ser gerados gráficos e tabelas contendo os resultados obtidos em cada um, a fim de analisar o tempo overheads e possíveis discrepâncias no resultado do contador sem sincronização. Além de comparar os diferenças entre Processos e Threads. 
+
+# Tabelas de tempo
+
+
+
+# Gráficos
+
+## Sem sincronização -
+#### P1:
+#### T1:
+
+## Com sincronização -
+#### P1:
+#### T1:
+
+
+# Assinaturas de Hardware
+#### Executed on: **Github Codespaces**
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
   Address sizes:          48 bits physical, 48 bits virtual
@@ -55,8 +84,7 @@ Vulnerabilities:
   Tsx async abort:        Not affected
   Vmscape:                Not affected
 
-# Executed on:
-**WSL2**
+#### Executed on: **WSL2 - Ubuntu**
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
   Address sizes:          39 bits physical, 48 bits virtual
@@ -106,9 +134,7 @@ Vulnerabilities:
   Srbds:                  Unknown: Dependent on hypervisor status
   Tsx async abort:        Not affected
 
-
-# Executed on:
-**Linux Ubuntu 24.04.1 LTS**
+#### Executed on: **Linux Ubuntu 24.04.1 LTS**
 Architecture:                x86_64
   CPU op-mode(s):            32-bit, 64-bit
   Address sizes:             39 bits physical, 48 bits virtual
