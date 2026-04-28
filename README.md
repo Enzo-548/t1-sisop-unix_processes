@@ -10,6 +10,10 @@ Porto Alegre – RS- Brasil
 - Vicenzo Martins Marramarco 
 
 ______________
+# Instruções de uso
+make: compila e executa o código de P1, P2, T1 e T2; cada um com N igual à 2, 4 e 8. (Os resultados de todas as execuções serão salvos no arquivo "resultados.csv")
+
+make clean: exclui o executável e os resultados salvos.
 
 # Introdução
 Este relatório descreve o experimento exploratório comparando o overhead de criação, custo de comunicação e a consistência de dados entre Processos e Threads. O objetivo do trabalho é implementar um contador global até o valor de 1.000.000.000 através de compartilhamento de memória e distribuir o esforço entre as unidades de execução (trabalhadores), variando entre 2, 4 e 8 unidades, e executar quatro experimentos:
